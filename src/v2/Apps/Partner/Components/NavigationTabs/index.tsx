@@ -8,6 +8,8 @@ import { Sticky } from "v2/Components/Sticky"
 import { ScrollIntoView } from "v2/Utils"
 import { Media } from "v2/Utils/Responsive"
 import { NavigationTabs_partner } from "v2/__generated__/NavigationTabs_partner.graphql"
+import { useSystemContext } from "v2/System"
+import { userIsAdmin } from "v2/Utils/user"
 
 // TODO: Update value in component height changed
 export const PARTNER_NAV_BAR_HEIGHT = 78
@@ -18,6 +20,8 @@ interface NavigationTabsProps {
 
 export const NavigationTabs: React.FC<NavigationTabsProps> = ({ partner }) => {
   const { mobile, desktop } = useNavBarHeight()
+  const { user } = useSystemContext()
+  const isAdmin = userIsAdmin(user)
 
   const renderTabs = (scrollOffset: number) => {
     const {
@@ -30,6 +34,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({ partner }) => {
       displayArtistsSection,
       representedArtists,
       notRepresentedArtists,
+      viewingRooms,
     } = partner
 
     const route = (path?: string) => `/partner/${slug}${path ? path : ""}`
@@ -45,6 +50,12 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({ partner }) => {
         href: route("/shows"),
         exact: true,
         hidden: !counts?.displayableShows,
+      },
+      {
+        name: "Viewing Rooms",
+        href: route("/viewing-rooms"),
+        exact: true,
+        hidden: !isAdmin || !viewingRooms || !viewingRooms?.totalCount,
       },
       {
         name: partnerType === "Brand" ? "Shop" : "Works",
@@ -143,6 +154,11 @@ export const NavigationTabsFragmentContainer = createFragmentContainer(
           representedBy: false
           hasPublishedArtworks: true
           displayOnPartnerProfile: true
+        ) {
+          totalCount
+        }
+        viewingRooms: viewingRoomsConnection(
+          statuses: [live, closed, scheduled]
         ) {
           totalCount
         }

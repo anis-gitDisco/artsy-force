@@ -23,8 +23,7 @@ const FairSubApp = loadable(
   }
 )
 const FairOverviewRoute = loadable(
-  () =>
-    import(/* webpackChunkName: "fairBundle" */ "./Components/FairOverview"),
+  () => import(/* webpackChunkName: "fairBundle" */ "./Routes/FairOverview"),
   {
     resolveComponent: component => component.FairOverviewFragmentContainer,
   }
@@ -36,7 +35,7 @@ const FairExhibitorsRoute = loadable(
   }
 )
 const FairBoothsRoute = loadable(
-  () => import(/* webpackChunkName: "fairBundle" */ "./Routes/FairBooths"),
+  () => import(/* webpackChunkName: "fairBundle" */ "./Components/FairBooths"),
   {
     resolveComponent: component => component.FairBoothsFragmentContainer,
   }
@@ -58,7 +57,7 @@ export const fairRoutes: AppRouteConfig[] = [
   {
     path: "/fair/:slug",
     theme: "v3",
-    ignoreScrollBehavior: true,
+    ignoreScrollBehaviorBetweenChildren: true,
     getComponent: () => FairApp,
     prepare: () => {
       FairApp.preload()

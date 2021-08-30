@@ -35,6 +35,13 @@ const ShowsRoute = loadable(
   }
 )
 
+const ViewinRoomsRoute = loadable(
+  () => import(/* webpackChunkName: "partnerBundle" */ "./Routes/ViewingRooms"),
+  {
+    resolveComponent: component => component.ViewingRoomFragmentContainer,
+  }
+)
+
 const WorksRoute = loadable(
   () => import(/* webpackChunkName: "partnerBundle" */ "./Routes/Works"),
   {
@@ -58,9 +65,9 @@ const ContactRoute = loadable(
 
 export const partnerRoutes: AppRouteConfig[] = [
   {
-    scrollToTop: true,
-    getComponent: () => PartnerApp,
     path: "/partner/:partnerId",
+    ignoreScrollBehaviorBetweenChildren: true,
+    getComponent: () => PartnerApp,
     prepare: () => {
       PartnerApp.preload()
     },
@@ -98,8 +105,8 @@ export const partnerRoutes: AppRouteConfig[] = [
     },
     children: [
       {
-        getComponent: () => OverviewRoute,
         path: "",
+        getComponent: () => OverviewRoute,
         prepare: () => {
           OverviewRoute.preload()
         },
@@ -112,57 +119,17 @@ export const partnerRoutes: AppRouteConfig[] = [
         `,
       },
       {
-        getComponent: () => ArticlesRoute,
-        path: "articles",
-        prepare: () => {
-          ArticlesRoute.preload()
-        },
-        ignoreScrollBehavior: true,
-        prepareVariables: (params, { location }) => {
-          return {
-            ...params,
-            page: location.query.page,
-          }
-        },
-        query: graphql`
-          query partnerRoutes_ArticlesQuery($partnerId: String!, $page: Int) {
-            partner(id: $partnerId) @principalField {
-              articles: articlesConnection(first: 0) {
-                totalCount
-              }
-              ...Articles_partner @arguments(page: $page)
-            }
-          }
-        `,
-        render: ({ Component, props, match }) => {
-          if (!(Component && props)) {
-            return
-          }
-
-          const { partner } = props as any
-
-          if (!partner) {
-            return
-          }
-
-          const {
-            articles: { totalCount },
-          } = partner
-
-          if (!totalCount) {
-            throw new RedirectException(
-              `/partner/${match.params.partnerId}`,
-              302
-            )
-          }
-
-          return <Component {...props} />
+        path: "overview",
+        render: props => {
+          throw new RedirectException(
+            `/partner/${props.match.params.partnerId}`,
+            302
+          )
         },
       },
       {
-        getComponent: () => ShowsRoute,
         path: "shows",
-        ignoreScrollBehavior: true,
+        getComponent: () => ShowsRoute,
         prepare: () => {
           ShowsRoute.preload()
         },
@@ -202,8 +169,35 @@ export const partnerRoutes: AppRouteConfig[] = [
         },
       },
       {
-        getComponent: () => WorksRoute,
+        path: "viewing-rooms",
+        getComponent: () => ViewinRoomsRoute,
+        prepare: () => {
+          ViewinRoomsRoute.preload()
+        },
+        query: graphql`
+          query partnerRoutes_ViewingRoomsQuery($partnerId: String!) {
+            partner(id: $partnerId) @principalField {
+              ...ViewingRooms_partner
+            }
+          }
+        `,
+        render: ({ Component, props, match }) => {
+          if (!(Component && props)) {
+            return
+          }
+
+          const { partner } = props as any
+
+          if (!partner) {
+            return
+          }
+
+          return <Component {...props} />
+        },
+      },
+      {
         path: "works",
+        getComponent: () => WorksRoute,
         prepare: () => {
           WorksRoute.preload()
         },
@@ -233,7 +227,6 @@ export const partnerRoutes: AppRouteConfig[] = [
             shouldFetchCounts: !!props.context.user,
           }
         },
-        ignoreScrollBehavior: true,
         query: graphql`
           query partnerRoutes_WorksQuery(
             $partnerId: String!
@@ -282,12 +275,11 @@ export const partnerRoutes: AppRouteConfig[] = [
         },
       },
       {
-        getComponent: () => ArtistsRoute,
         path: "artists/:artistId?",
+        getComponent: () => ArtistsRoute,
         prepare: () => {
           ArtistsRoute.preload()
         },
-        ignoreScrollBehavior: true,
         query: graphql`
           query partnerRoutes_ArtistsQuery($partnerId: String!) {
             partner(id: $partnerId) @principalField {
@@ -324,12 +316,58 @@ export const partnerRoutes: AppRouteConfig[] = [
         },
       },
       {
-        getComponent: () => ContactRoute,
+        path: "articles",
+        getComponent: () => ArticlesRoute,
+        prepare: () => {
+          ArticlesRoute.preload()
+        },
+        prepareVariables: (params, { location }) => {
+          return {
+            ...params,
+            page: location.query.page,
+          }
+        },
+        query: graphql`
+          query partnerRoutes_ArticlesQuery($partnerId: String!, $page: Int) {
+            partner(id: $partnerId) @principalField {
+              articles: articlesConnection(first: 0) {
+                totalCount
+              }
+              ...Articles_partner @arguments(page: $page)
+            }
+          }
+        `,
+        render: ({ Component, props, match }) => {
+          if (!(Component && props)) {
+            return
+          }
+
+          const { partner } = props as any
+
+          if (!partner) {
+            return
+          }
+
+          const {
+            articles: { totalCount },
+          } = partner
+
+          if (!totalCount) {
+            throw new RedirectException(
+              `/partner/${match.params.partnerId}`,
+              302
+            )
+          }
+
+          return <Component {...props} />
+        },
+      },
+      {
         path: "contact",
+        getComponent: () => ContactRoute,
         prepare: () => {
           ContactRoute.preload()
         },
-        ignoreScrollBehavior: true,
         query: graphql`
           query partnerRoutes_ContactQuery($partnerId: String!) {
             partner(id: $partnerId) @principalField {
@@ -359,15 +397,6 @@ export const partnerRoutes: AppRouteConfig[] = [
           }
 
           return <Component {...props} />
-        },
-      },
-      {
-        path: "overview",
-        render: props => {
-          throw new RedirectException(
-            `/partner/${props.match.params.partnerId}`,
-            302
-          )
         },
       },
     ],

@@ -39,10 +39,10 @@
   resolved "https://registry.yarnpkg.com/@artsy/detect-responsive-traits/-/detect-responsive-traits-0.0.5.tgz#abf85959f8567816babec6f582b744f58c98b726"
   integrity sha512-axgW5YuqSpPzHb27yo2jmPHz/N9eN2hh2E+Mub5BKuu/jHZI+iDTdw0OZ3I+z7Z9WKBh+FPVx4gpza5w7slJNA==
 
-"@artsy/express-reloadable@1.4.8":
-  version "1.4.8"
-  resolved "https://registry.yarnpkg.com/@artsy/express-reloadable/-/express-reloadable-1.4.8.tgz#2cf6354f166d8f3fde20c3104db00df5f69b69c3"
-  integrity sha512-4f00owY4WtRxVrH0ZMhH06Rr3e8ovkRjOjbgUb/GkwaHYGWBjBj9oAQp5hz9/KkS0aMAbxoKandKQcl5BkSrhA==
+"@artsy/express-reloadable@1.4.9":
+  version "1.4.9"
+  resolved "https://registry.yarnpkg.com/@artsy/express-reloadable/-/express-reloadable-1.4.9.tgz#e6a77672905f986a58585d998faaafe329453b84"
+  integrity sha512-9NJXJdNk13S17I3VZH9YjEwUpfGlymDMZWOk9M46raV3iCqaDcw1a5IvmTz4uz4PxxvBS+KihAnJbOXC1TOsCg==
   dependencies:
     chalk "^2.3.1"
     chokidar "^3.0.0"
@@ -107,10 +107,10 @@
   dependencies:
     passport-strategy "1.x.x"
 
-"@artsy/passport@3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@artsy/passport/-/passport-3.1.0.tgz#4caf28d6e90a87c3f18e940480a43d898a9340ca"
-  integrity sha512-Hml0Vl04FkDcr7dyCxja7o2fIYkGsqvEew1RNerg1ram95G5Jt56dZ1t7Ol/Yt26mm/IcvEVjqHFgsncNY4Lgg==
+"@artsy/passport@3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@artsy/passport/-/passport-3.2.0.tgz#6f17a87f18a3911987923edb5136912d66e92044"
+  integrity sha512-6Y3n8nHR4Y4O9Yyz+5yADPozlPTQJHvN2l6oS9TWjtwuDFkqX/UQp/tNnrf8sZytv3lTpCYGGM4d6fhshT0HYg==
   dependencies:
     "@artsy/passport-local-with-otp" "0.3.1"
     "@artsy/xapp" "1.0.6"
@@ -190,6 +190,15 @@
   dependencies:
     consolidate "^0.14.5"
     lodash "^4.17.11"
+
+"@artsy/to-title-case@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@artsy/to-title-case/-/to-title-case-1.0.3.tgz#e0c983d8dd3ff98d18fb8ae410483cb073df0516"
+  integrity sha512-f0ogCJS1BdWEDPihp+0etp64SD3ppfhVCK8y5eEfkh32SUo227B1Y35+qvR4mczexRSqoCnOvdWCUFdu4wbSNA==
+  dependencies:
+    lodash.deburr "^4.1.0"
+    lodash.isnumber "^3.0.3"
+    lodash.upperfirst "^4.3.1"
 
 "@artsy/xapp@1.0.6":
   version "1.0.6"
@@ -13523,6 +13532,11 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
 
+lodash.deburr@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/lodash.deburr/-/lodash.deburr-4.1.0.tgz#ddb1bbb3ef07458c0177ba07de14422cb033ff9b"
+  integrity sha1-3bG7s+8HRYwBd7oH3hRCLLAz/5s=
+
 lodash.defaults@^4.0.1:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
@@ -13726,6 +13740,11 @@ lodash.uniq@4.5.0, lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
+
+lodash.upperfirst@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/lodash.upperfirst/-/lodash.upperfirst-4.3.1.tgz#1365edf431480481ef0d1c68957a5ed99d49f7ce"
+  integrity sha1-E2Xt9DFIBIHvDRxolXpe2Z1J984=
 
 lodash@4.17.15, lodash@4.17.21, "lodash@>=3.5 <5", lodash@^4.11.1, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@~3.10.1, lodash@~4.17.2:
   version "4.17.21"
@@ -15459,9 +15478,9 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
-"passport-apple@https://github.com/artsy/passport-apple#f41adb7822c8344b72bc36a7d68312f6592cb14f":
+"passport-apple@git+https://github.com/artsy/passport-apple.git#f41adb7822c8344b72bc36a7d68312f6592cb14f":
   version "1.1.2"
-  resolved "https://github.com/artsy/passport-apple#f41adb7822c8344b72bc36a7d68312f6592cb14f"
+  resolved "git+https://github.com/artsy/passport-apple.git#f41adb7822c8344b72bc36a7d68312f6592cb14f"
   dependencies:
     jsonwebtoken "^8.5.1"
     passport-oauth2 "^1.5.0"
