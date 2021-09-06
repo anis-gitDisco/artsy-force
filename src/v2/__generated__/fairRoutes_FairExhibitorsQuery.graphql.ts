@@ -34,22 +34,22 @@ fragment ExhibitorsLetterNav_fair on Fair {
   }
 }
 
-fragment FairExhibitorCard_partner on Partner {
-  name
-  href
-  internalID
-  slug
-  cities
-  profile {
-    ...FollowProfileButton_profile
-    icon {
-      cropped(width: 50, height: 50) {
-        src
-        srcSet
+fragment FairExhibitorCard_exhibitor on FairExhibitor {
+  profileID
+  partner {
+    name
+    internalID
+    slug
+    cities
+    profile {
+      ...FollowProfileButton_profile
+      icon {
+        cropped(width: 50, height: 50) {
+          src
+          srcSet
+        }
       }
-    }
-    image {
-      url(version: "medium")
+      id
     }
     id
   }
@@ -59,9 +59,9 @@ fragment FairExhibitorsGroup_exhibitorsGroup on FairExhibitorsGroup {
   exhibitors {
     partner {
       internalID
-      ...FairExhibitorCard_partner
       id
     }
+    ...FairExhibitorCard_exhibitor
   }
 }
 
@@ -112,21 +112,21 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "name",
+  "name": "id",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "slug",
+  "name": "name",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "slug",
   "storageKey": null
 };
 return {
@@ -209,14 +209,8 @@ return {
                     "selections": [
                       (v2/*: any*/),
                       (v3/*: any*/),
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "href",
-                        "storageKey": null
-                      },
                       (v4/*: any*/),
+                      (v5/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -232,9 +226,9 @@ return {
                         "name": "profile",
                         "plural": false,
                         "selections": [
+                          (v3/*: any*/),
                           (v5/*: any*/),
                           (v4/*: any*/),
-                          (v3/*: any*/),
                           (v2/*: any*/),
                           {
                             "alias": "is_followed",
@@ -289,36 +283,18 @@ return {
                               }
                             ],
                             "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "Image",
-                            "kind": "LinkedField",
-                            "name": "image",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": [
-                                  {
-                                    "kind": "Literal",
-                                    "name": "version",
-                                    "value": "medium"
-                                  }
-                                ],
-                                "kind": "ScalarField",
-                                "name": "url",
-                                "storageKey": "url(version:\"medium\")"
-                              }
-                            ],
-                            "storageKey": null
                           }
                         ],
                         "storageKey": null
-                      },
-                      (v5/*: any*/)
+                      }
                     ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "profileID",
                     "storageKey": null
                   }
                 ],
@@ -327,7 +303,7 @@ return {
             ],
             "storageKey": null
           },
-          (v5/*: any*/)
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
@@ -338,7 +314,7 @@ return {
     "metadata": {},
     "name": "fairRoutes_FairExhibitorsQuery",
     "operationKind": "query",
-    "text": "query fairRoutes_FairExhibitorsQuery(\n  $slug: String!\n) {\n  fair(id: $slug) @principalField {\n    ...FairExhibitors_fair\n    id\n  }\n}\n\nfragment ExhibitorsLetterNav_fair on Fair {\n  exhibitorsGroupedByName {\n    letter\n  }\n}\n\nfragment FairExhibitorCard_partner on Partner {\n  name\n  href\n  internalID\n  slug\n  cities\n  profile {\n    ...FollowProfileButton_profile\n    icon {\n      cropped(width: 50, height: 50) {\n        src\n        srcSet\n      }\n    }\n    image {\n      url(version: \"medium\")\n    }\n    id\n  }\n}\n\nfragment FairExhibitorsGroup_exhibitorsGroup on FairExhibitorsGroup {\n  exhibitors {\n    partner {\n      internalID\n      ...FairExhibitorCard_partner\n      id\n    }\n  }\n}\n\nfragment FairExhibitors_fair on Fair {\n  exhibitorsGroupedByName {\n    letter\n    exhibitors {\n      partnerID\n    }\n    ...FairExhibitorsGroup_exhibitorsGroup\n  }\n  ...ExhibitorsLetterNav_fair\n}\n\nfragment FollowProfileButton_profile on Profile {\n  id\n  slug\n  name\n  internalID\n  is_followed: isFollowed\n}\n"
+    "text": "query fairRoutes_FairExhibitorsQuery(\n  $slug: String!\n) {\n  fair(id: $slug) @principalField {\n    ...FairExhibitors_fair\n    id\n  }\n}\n\nfragment ExhibitorsLetterNav_fair on Fair {\n  exhibitorsGroupedByName {\n    letter\n  }\n}\n\nfragment FairExhibitorCard_exhibitor on FairExhibitor {\n  profileID\n  partner {\n    name\n    internalID\n    slug\n    cities\n    profile {\n      ...FollowProfileButton_profile\n      icon {\n        cropped(width: 50, height: 50) {\n          src\n          srcSet\n        }\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment FairExhibitorsGroup_exhibitorsGroup on FairExhibitorsGroup {\n  exhibitors {\n    partner {\n      internalID\n      id\n    }\n    ...FairExhibitorCard_exhibitor\n  }\n}\n\nfragment FairExhibitors_fair on Fair {\n  exhibitorsGroupedByName {\n    letter\n    exhibitors {\n      partnerID\n    }\n    ...FairExhibitorsGroup_exhibitorsGroup\n  }\n  ...ExhibitorsLetterNav_fair\n}\n\nfragment FollowProfileButton_profile on Profile {\n  id\n  slug\n  name\n  internalID\n  is_followed: isFollowed\n}\n"
   }
 };
 })();
