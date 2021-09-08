@@ -17,12 +17,12 @@ import { InquirySpecialist } from "./Views/InquirySpecialist"
 
 const VIEWS = {
   Account: InquiryAccount, // ✅
-  ArtistsInCollection: InquiryArtistsInCollection,
+  ArtistsInCollection: InquiryArtistsInCollection, // ✅
   AuctionHousesYouWorkWith: InquiryAuctionHousesYouWorkWith, // ✅
   BasicInfo: InquiryBasicInfoQueryRenderer, // ✅
   CommercialInterest: InquiryCommercialInterest, // ✅
-  Confirmation: InquiryConfirmation,
-  Done: InquiryDone,
+  Confirmation: InquiryConfirmation, // ✅
+  Done: InquiryDone, // ✅
   FairsYouAttend: InquiryFairsYouAttend, // ✅
   GalleriesYouWorkWith: InquiryGalleriesYouWorkWith, // ✅
   HowCanWeHelp: InquiryHowCanWeHelp,

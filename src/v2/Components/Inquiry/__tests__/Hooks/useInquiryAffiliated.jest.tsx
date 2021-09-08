@@ -2,11 +2,11 @@ import React from "react"
 import { mount } from "enzyme"
 import { useInquiryAffiliated, Mode } from "../../Hooks/useInquiryAffiliated"
 import { useUpdateCollectorProfile } from "../../Hooks/useUpdateCollectorProfile"
-import { useInquiryContext } from "../../InquiryContext"
+import { useInquiryContext } from "../../Hooks/useInquiryContext"
 import { flushPromiseQueue } from "v2/DevTools"
 
 jest.mock("../../Hooks/useUpdateCollectorProfile")
-jest.mock("../../InquiryContext")
+jest.mock("../../Hooks/useInquiryContext")
 
 describe("useInquiryAffiliated", () => {
   const Wrapper = () => {
@@ -17,6 +17,8 @@ describe("useInquiryAffiliated", () => {
       selection,
       mode,
     } = useInquiryAffiliated()
+
+    const { submitUpdateCollectorProfile } = useUpdateCollectorProfile()
 
     const options = [
       { text: "example 1", value: "one" },
@@ -41,8 +43,8 @@ describe("useInquiryAffiliated", () => {
         <button
           id="save"
           onClick={() =>
-            handleSave({
-              affiliatedGalleryIds: selection.map(option => option.value),
+            handleSave(affiliatedGalleryIds => {
+              return submitUpdateCollectorProfile({ affiliatedGalleryIds })
             })
           }
         >
