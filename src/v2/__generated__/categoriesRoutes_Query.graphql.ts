@@ -24,7 +24,7 @@ query categoriesRoutes_Query {
 }
 
 fragment CategoriesApp_geneFamiliesConnection on GeneFamilyConnection {
-  ...SidebarNav_geneFamiliesConnection
+  ...StickyNav_geneFamiliesConnection
   ...GeneFamilies_geneFamiliesConnection
 }
 
@@ -57,7 +57,7 @@ fragment GeneFamily_geneFamily on GeneFamily {
   }
 }
 
-fragment SidebarNav_geneFamiliesConnection on GeneFamilyConnection {
+fragment StickyNav_geneFamiliesConnection on GeneFamilyConnection {
   edges {
     node {
       internalID
@@ -250,7 +250,7 @@ return {
     "metadata": {},
     "name": "categoriesRoutes_Query",
     "operationKind": "query",
-    "text": "query categoriesRoutes_Query {\n  geneFamiliesConnection(first: 20) {\n    ...CategoriesApp_geneFamiliesConnection\n  }\n}\n\nfragment CategoriesApp_geneFamiliesConnection on GeneFamilyConnection {\n  ...SidebarNav_geneFamiliesConnection\n  ...GeneFamilies_geneFamiliesConnection\n}\n\nfragment GeneFamilies_geneFamiliesConnection on GeneFamilyConnection {\n  edges {\n    node {\n      internalID\n      ...GeneFamily_geneFamily\n      id\n    }\n  }\n}\n\nfragment GeneFamily_geneFamily on GeneFamily {\n  id\n  slug\n  name\n  genes {\n    id\n    displayName\n    name\n    slug\n  }\n  featuredGeneLinks {\n    href\n    title\n    image {\n      url(version: \"large_rectangle\")\n    }\n  }\n}\n\nfragment SidebarNav_geneFamiliesConnection on GeneFamilyConnection {\n  edges {\n    node {\n      internalID\n      slug\n      name\n      id\n    }\n  }\n}\n"
+    "text": "query categoriesRoutes_Query {\n  geneFamiliesConnection(first: 20) {\n    ...CategoriesApp_geneFamiliesConnection\n  }\n}\n\nfragment CategoriesApp_geneFamiliesConnection on GeneFamilyConnection {\n  ...StickyNav_geneFamiliesConnection\n  ...GeneFamilies_geneFamiliesConnection\n}\n\nfragment GeneFamilies_geneFamiliesConnection on GeneFamilyConnection {\n  edges {\n    node {\n      internalID\n      ...GeneFamily_geneFamily\n      id\n    }\n  }\n}\n\nfragment GeneFamily_geneFamily on GeneFamily {\n  id\n  slug\n  name\n  genes {\n    id\n    displayName\n    name\n    slug\n  }\n  featuredGeneLinks {\n    href\n    title\n    image {\n      url(version: \"large_rectangle\")\n    }\n  }\n}\n\nfragment StickyNav_geneFamiliesConnection on GeneFamilyConnection {\n  edges {\n    node {\n      internalID\n      slug\n      name\n      id\n    }\n  }\n}\n"
   }
 };
 })();

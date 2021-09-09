@@ -3,7 +3,7 @@
 
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type SidebarNav_geneFamiliesConnection = {
+export type StickyNav_geneFamiliesConnection = {
     readonly edges: ReadonlyArray<{
         readonly node: {
             readonly internalID: string;
@@ -11,12 +11,12 @@ export type SidebarNav_geneFamiliesConnection = {
             readonly name: string;
         } | null;
     } | null> | null;
-    readonly " $refType": "SidebarNav_geneFamiliesConnection";
+    readonly " $refType": "StickyNav_geneFamiliesConnection";
 };
-export type SidebarNav_geneFamiliesConnection$data = SidebarNav_geneFamiliesConnection;
-export type SidebarNav_geneFamiliesConnection$key = {
-    readonly " $data"?: SidebarNav_geneFamiliesConnection$data;
-    readonly " $fragmentRefs": FragmentRefs<"SidebarNav_geneFamiliesConnection">;
+export type StickyNav_geneFamiliesConnection$data = StickyNav_geneFamiliesConnection;
+export type StickyNav_geneFamiliesConnection$key = {
+    readonly " $data"?: StickyNav_geneFamiliesConnection$data;
+    readonly " $fragmentRefs": FragmentRefs<"StickyNav_geneFamiliesConnection">;
 };
 
 
@@ -25,7 +25,7 @@ const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "SidebarNav_geneFamiliesConnection",
+  "name": "StickyNav_geneFamiliesConnection",
   "selections": [
     {
       "alias": null,
@@ -73,5 +73,5 @@ const node: ReaderFragment = {
   ],
   "type": "GeneFamilyConnection"
 };
-(node as any).hash = '23ad41f8544eb9df77eddd40e37f3c81';
+(node as any).hash = '483b43082e9eb2c97d57bed30a35d4d9';
 export default node;
