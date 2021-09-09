@@ -638,6 +638,7 @@ describe("Shipping", () => {
             country: "AQ",
           }
           fillAddressForm(page.root, address)
+          await page.update()
           await page.clickSubmit()
 
           const input = page
@@ -670,6 +671,7 @@ describe("Shipping", () => {
         it("after submit, shows all validation errors on inputs that have been touched", async () => {
           fillIn(page.root, { title: "Full name", value: "Erik David" })
 
+          await page.update()
           await page.clickSubmit()
 
           const cityInput = page.root
@@ -691,6 +693,8 @@ describe("Shipping", () => {
             country: "AQ",
           }
           fillAddressForm(page.root, address)
+
+          await page.update()
           await page.clickSubmit()
           expect(mutations.mockFetch).not.toBeCalled()
         })
@@ -707,6 +711,8 @@ describe("Shipping", () => {
             country: "AQ",
           }
           fillAddressForm(page.root, address)
+
+          await page.update()
           await page.clickSubmit()
           expect(mutations.mockFetch).toBeCalled()
         })
