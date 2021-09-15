@@ -14,6 +14,7 @@ import { createFragmentContainer, graphql } from "react-relay"
 import { useNavBarHeight } from "v2/Components/NavBar/useNavBarHeight"
 import { extractNodes } from "v2/Utils/extractNodes"
 import { useMatchMedia } from "v2/Utils/Hooks/useMatchMedia"
+import { useWindowSize } from "v2/Utils/Hooks/useWindowSize"
 import { scrollIntoView } from "v2/Utils/scrollHelpers"
 import { StickyNav_geneFamiliesConnection } from "v2/__generated__/StickyNav_geneFamiliesConnection.graphql"
 interface StickyNavProps {
@@ -40,6 +41,7 @@ const StickyNav: React.FC<StickyNavProps> = props => {
     <>
       <Spacer pb={1} />
       <Swiper Cell={Cell} Rail={Rail}>
+        <Spacer pr={[2, 4]} />
         {geneFamilies.map((geneFamily, i) => {
           return (
             <>
@@ -55,6 +57,7 @@ const StickyNav: React.FC<StickyNavProps> = props => {
             </>
           )
         })}
+        <Spacer pr={[2, 4]} />
       </Swiper>
       <Spacer pb={1} />
     </>
@@ -76,7 +79,12 @@ const Cell: React.ForwardRefExoticComponent<SwiperCellProps> = React.forwardRef(
 )
 
 const Rail: React.FC<SwiperRailProps> = props => {
-  return <SwiperRail {...props} display="block" />
+  const { width: windowWidth } = useWindowSize()
+  // This almost works, but not on the first render :(
+  const left = windowWidth > 1920 ? `${(windowWidth - 1920) / 2}px` : "auto"
+  return (
+    <SwiperRail {...props} display="block" position="relative" left={left} />
+  )
 }
 
 export const StickyNavFragmentContainer = createFragmentContainer(StickyNav, {

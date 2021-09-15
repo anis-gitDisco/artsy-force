@@ -8,7 +8,6 @@ import { StickyNavFragmentContainer } from "./Components/StickyNav"
 import { DROP_SHADOW, FullBleed, Spacer } from "@artsy/palette"
 import { StickyProvider, Sticky } from "v2/Components/Sticky"
 import { AppContainer } from "../Components/AppContainer"
-import { HorizontalPadding } from "../Components/HorizontalPadding"
 
 interface CategoriesAppProps {
   geneFamiliesConnection: CategoriesApp_geneFamiliesConnection
@@ -26,12 +25,10 @@ const CategoriesApp: React.FC<CategoriesAppProps> = props => {
           {({ stuck }) => {
             return (
               <FullBleed style={stuck ? { boxShadow: DROP_SHADOW } : undefined}>
-                <AppContainer>
-                  <HorizontalPadding>
-                    <StickyNavFragmentContainer
-                      geneFamiliesConnection={geneFamiliesConnection}
-                    />
-                  </HorizontalPadding>
+                <AppContainer maxWidth="none">
+                  <StickyNavFragmentContainer
+                    geneFamiliesConnection={geneFamiliesConnection}
+                  />
                 </AppContainer>
               </FullBleed>
             )
