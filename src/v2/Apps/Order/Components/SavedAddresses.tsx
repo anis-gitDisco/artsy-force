@@ -10,8 +10,10 @@ import {
   BorderBox,
   Join,
   Clickable,
+  useThemeConfig,
+  TextVariant,
 } from "@artsy/palette"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { createRefetchContainer, graphql, RelayRefetchProp } from "react-relay"
 import styled from "styled-components"
 import { SavedAddresses_me } from "v2/__generated__/SavedAddresses_me.graphql"
@@ -23,7 +25,6 @@ import { CommitMutation } from "v2/Apps/Order/Utils/commitMutation"
 import createLogger from "v2/Utils/logger"
 import { SavedAddressItem } from "v2/Apps/Order/Components/SavedAddressItem"
 import { deleteUserAddress } from "v2/Apps/Order/Mutations/DeleteUserAddress"
-import { updateUserDefaultAddress } from "v2/Apps/Order/Mutations/UpdateUserDefaultAddress"
 import { useSystemContext } from "v2/System/SystemContext"
 import { compact } from "lodash"
 import { extractNodes } from "v2/Utils/extractNodes"
@@ -34,6 +35,7 @@ export const NEW_ADDRESS = "NEW_ADDRESS"
 const PAGE_SIZE = 30
 
 interface SavedAddressesProps {
+  onChangeAddressCount?: (active?: number) => void
   me: SavedAddresses_me
   onSelect?: (string) => void
   inCollectorProfile: boolean
@@ -76,6 +78,7 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
   const logger = createLogger("SavedAddresses.tsx")
   const {
     onSelect,
+    onChangeAddressCount,
     me,
     inCollectorProfile,
     relay,
@@ -85,6 +88,11 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
     onShowToast,
     onAddressEdit,
   } = props
+
+  useEffect(() => {
+    onChangeAddressCount &&
+      onChangeAddressCount(me.addressConnection?.totalCount)
+  }, [me.addressConnection?.totalCount])
   const addressList = extractNodes(me?.addressConnection) ?? []
   const { relayEnvironment } = useSystemContext()
 
@@ -110,8 +118,7 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
 
   const handleDeleteAddress = async (addressID: string) => {
     let response = await deleteUserAddress(
-      // @ts-expect-error STRICT_NULL_CHECK
-      relayEnvironment,
+      relayEnvironment!,
       addressID,
       () => {
         refetchAddresses(() => {
@@ -136,15 +143,6 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
     setAddress(address)
   }
 
-  const handleSetDefaultAddress = (addressID: string) => {
-    updateUserDefaultAddress(
-      relayEnvironment!,
-      addressID,
-      () => refetchAddresses(),
-      onError
-    )
-  }
-
   const createOrUpdateAddressSuccess = (
     address?: UpdateUserAddressMutationResponse &
       CreateUserAddressMutationResponse
@@ -160,17 +158,26 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
     onShowToast && onShowToast(true, "Saved")
   }
 
+  const styles = useThemeConfig({
+    v2: {
+      variant: "text" as TextVariant,
+    },
+    v3: {
+      variant: "sm" as TextVariant,
+    },
+  })
+
   const collectorProfileAddressItems = addressList.map((address, index) => {
     if (!address) {
       return null
     }
 
     const isDefaultAddress = address.isDefault
-
     return (
       <BorderBox
         p={2}
-        width="100%"
+        mb={2}
+        width={340}
         flexDirection="column"
         key={"addressIndex" + index}
       >
@@ -179,56 +186,52 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
           address={address}
           handleClickEdit={() => handleEditAddress(address, index)}
         />
-        <Separator my={1} />
-        <ModifyAddressWrapper>
-          {!isDefaultAddress && (
-            <Box mr={[3, 1]}>
-              <Text
-                onClick={() => handleSetDefaultAddress(address.internalID)}
-                variant="text"
-                color="black60"
-                style={{
-                  cursor: "pointer",
-                }}
+        <Box mt="auto">
+          <Separator my={2} />
+          <ModifyAddressWrapper width="100%">
+            {isDefaultAddress && (
+              <Box mr={[2, 1]}>
+                <Text textAlign="left" variant={styles.variant}>
+                  Default Address
+                </Text>
+              </Box>
+            )}
+            <Box ml="auto">
+              <Clickable
+                mr={[2, 1]}
+                textDecoration="underline"
+                data-test="editAddressInProfileClick"
+                onClick={() => handleEditAddress(address, index)}
               >
-                Set as Default
-              </Text>
+                <Text
+                  variant={styles.variant}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  data-test="editAddressInProfile"
+                >
+                  Edit
+                </Text>
+              </Clickable>
+
+              <Clickable
+                textDecoration="underline"
+                data-test="deleteAddressInProfile"
+                onClick={() => handleDeleteAddress(address.internalID)}
+              >
+                <Text
+                  variant={styles.variant}
+                  color="red100"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </Text>
+              </Clickable>
             </Box>
-          )}
-          <Box mr={[3, 1]}>
-            <Clickable
-              data-test="editAddressInProfileClick"
-              onClick={() => handleEditAddress(address, index)}
-            >
-              <Text
-                variant="text"
-                color="blue100"
-                style={{
-                  cursor: "pointer",
-                }}
-                data-test="editAddressInProfile"
-              >
-                Edit
-              </Text>
-            </Clickable>
-          </Box>
-          <Box>
-            <Clickable
-              data-test="deleteAddressInProfile"
-              onClick={() => handleDeleteAddress(address.internalID)}
-            >
-              <Text
-                variant="text"
-                color="red100"
-                style={{
-                  cursor: "pointer",
-                }}
-              >
-                Delete
-              </Text>
-            </Clickable>
-          </Box>
-        </ModifyAddressWrapper>
+          </ModifyAddressWrapper>
+        </Box>
       </BorderBox>
     )
   })
@@ -237,10 +240,10 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
     <>
       {inCollectorProfile ? (
         <Button
+          mb={2}
+          mt={[2, 4]}
           data-test="profileButton"
-          mt={2}
-          variant="primaryBlack"
-          size="large"
+          variant="secondaryOutline"
           onClick={() => {
             setShowAddressModal(true),
               setModalDetails({
@@ -254,6 +257,8 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
       ) : (
         addressList.length > 0 && (
           <Button
+            mt={[2, 4]}
+            mb={2}
             data-test="shippingButton"
             variant="secondaryOutline"
             onClick={() => {
@@ -300,9 +305,15 @@ const SavedAddresses: React.FC<SavedAddressesProps> = props => {
 
   return inCollectorProfile ? (
     <>
-      <Flex flexDirection="column">
-        <Join separator={<Spacer mb="1" />}>
-          {collectorProfileAddressItems}
+      <Flex flexWrap="wrap" flexDirection="row">
+        <Join separator={<Spacer mr={2} />}>
+          {collectorProfileAddressItems.length ? (
+            collectorProfileAddressItems
+          ) : (
+            <Text color="black60" variant="sm">
+              Please add an address for a faster checkout experience in future.
+            </Text>
+          )}
         </Join>
       </Flex>
       {addAddressButton}
@@ -345,6 +356,7 @@ export const SavedAddressesFragmentContainer = createRefetchContainer(
           before: $before
           after: $after
         ) @connection(key: "SavedAddresses_addressConnection") {
+          totalCount
           edges {
             node {
               id

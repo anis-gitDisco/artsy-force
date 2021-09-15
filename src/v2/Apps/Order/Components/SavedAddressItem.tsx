@@ -1,5 +1,10 @@
-import { Flex, Text, RadioProps } from "@artsy/palette"
-import { themeGet } from "@styled-system/theme-get"
+import {
+  Flex,
+  Text,
+  RadioProps,
+  useThemeConfig,
+  TextVariant,
+} from "@artsy/palette"
 import React from "react"
 import styled from "styled-components"
 import { SavedAddresses_me } from "v2/__generated__/SavedAddresses_me.graphql"
@@ -38,8 +43,19 @@ export const SavedAddressItem: React.FC<SavedAddressItemProps> = (
     .join(", ")
   const nameAndAddressLine = [name, addressLine1, addressLine2, addressLine3]
 
+  const styles = useThemeConfig({
+    v2: {
+      smVariant: "text" as TextVariant,
+      xsVariant: "caption" as TextVariant,
+    },
+    v3: {
+      smVariant: "sm" as TextVariant,
+      xsVariant: "xs" as TextVariant,
+    },
+  })
+
   return (
-    <Flex width="100%">
+    <Flex maxWidth="100%">
       <Flex flexDirection="column">
         {nameAndAddressLine.length > 0 &&
           nameAndAddressLine.map(
@@ -55,28 +71,23 @@ export const SavedAddressItem: React.FC<SavedAddressItemProps> = (
                   <Text
                     textTransform="capitalize"
                     textColor={index === 0 ? "black100" : "black60"}
-                    variant="sm"
+                    variant={styles.smVariant}
                   >
                     {line}
                   </Text>
-                  {address?.isDefault && index === 0 && (
-                    <DefaultLabel>
-                      <Text
-                        textColor="black60"
-                        variant="caption"
-                        display="inline"
-                      >
-                        Default
-                      </Text>
-                    </DefaultLabel>
-                  )}
                 </Flex>
               )
           )}
-        <Text textColor="black60" textTransform="capitalize">
+        <Text
+          textColor="black60"
+          textTransform="capitalize"
+          variant={styles.smVariant}
+        >
           {formattedAddressLine}
         </Text>
-        <Text textColor="black60">{phoneNumber}</Text>
+        <Text textColor="black60" variant={styles.smVariant}>
+          {phoneNumber}
+        </Text>
       </Flex>
       <EditButton
         position="absolute"
@@ -89,7 +100,7 @@ export const SavedAddressItem: React.FC<SavedAddressItemProps> = (
           handleClickEdit(index)
         }}
         textColor="blue100"
-        variant="sm"
+        variant={styles.smVariant}
         data-test="editAddressInShipping"
       >
         Edit
@@ -102,14 +113,4 @@ const EditButton = styled(Text)`
   &:hover {
     text-decoration: underline;
   }
-`
-
-const DefaultLabel = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0 5px;
-  background-color: ${themeGet("colors.black10")};
-  height: 24px;
-  margin-left: 5px;
-  border-radius: 2px;
 `
