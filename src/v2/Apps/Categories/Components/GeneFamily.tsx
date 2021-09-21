@@ -30,7 +30,7 @@ export const GeneFamily: React.FC<GeneFamilyProps> = props => {
     return geneWithImage ?? gene
   })
 
-  const sortedGenes = alphabetizeGenes(genesWithImages)
+  const sortedGenes = alphabetizeGenes(genesWithImages as any)
 
   const isMobile = useMatchMedia(themeProps.mediaQueries.xs)
 
@@ -85,6 +85,7 @@ export const GeneFamilyFragmentContainer = createFragmentContainer(GeneFamily, {
         id
         name
         slug
+        imageUrl
       }
       id
       name
