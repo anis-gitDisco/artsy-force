@@ -11,10 +11,10 @@ import {
 } from "@artsy/palette"
 import React from "react"
 import { createFragmentContainer, graphql } from "react-relay"
+import { AppContainer } from "v2/Apps/Components/AppContainer"
 import { useNavBarHeight } from "v2/Components/NavBar/useNavBarHeight"
 import { extractNodes } from "v2/Utils/extractNodes"
 import { useMatchMedia } from "v2/Utils/Hooks/useMatchMedia"
-import { useWindowSize } from "v2/Utils/Hooks/useWindowSize"
 import { scrollIntoView } from "v2/Utils/scrollHelpers"
 import { StickyNav_geneFamiliesConnection } from "v2/__generated__/StickyNav_geneFamiliesConnection.graphql"
 interface StickyNavProps {
@@ -79,11 +79,10 @@ const Cell: React.ForwardRefExoticComponent<SwiperCellProps> = React.forwardRef(
 )
 
 const Rail: React.FC<SwiperRailProps> = props => {
-  const { width: windowWidth } = useWindowSize()
-  // This almost works, but not on the first render :(
-  const left = windowWidth > 1920 ? `${(windowWidth - 1920) / 2}px` : "auto"
   return (
-    <SwiperRail {...props} display="block" position="relative" left={left} />
+    <AppContainer>
+      <SwiperRail {...props} display="block" position="relative" />
+    </AppContainer>
   )
 }
 
