@@ -4116,6 +4116,8 @@ type CommerceShipment {
     timezone: String
   ): String
   deliveryWindowModifier: String
+  estimatedDeliveryWindow: String
+  estimatedPickupWindow: String
   id: ID!
   pickupEnd(
     format: String
@@ -8320,6 +8322,15 @@ type Me implements Node {
     sort: MyCollectionArtworkSorts
   ): MyCollectionConnection
   name: String
+
+  # A connection of new works by artists the user interacted with (sorted by publication date).
+  newWorksByInterestingArtists(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    page: Int
+  ): ArtworkConnection
   orders(
     after: String
     before: String
@@ -9025,7 +9036,14 @@ type OrderedSetEdge {
   node: OrderedSet
 }
 
-union OrderedSetItem = Artist | Artwork | FeaturedLink | Gene | Sale | Show
+union OrderedSetItem =
+    Artist
+  | Artwork
+  | FeaturedLink
+  | Gene
+  | Profile
+  | Sale
+  | Show
 
 # A connection to a list of items.
 type OrderedSetItemConnection {
@@ -9072,6 +9090,18 @@ enum OrderedSetSorts {
 }
 
 union OrderParty = Partner | User
+
+type Page {
+  content(format: Format): String
+
+  # A globally unique ID.
+  id: ID!
+
+  # A type-specific ID.
+  internalID: ID!
+  name: String!
+  published: Boolean!
+}
 
 type PageCursor {
   # first cursor on the page
@@ -9833,6 +9863,7 @@ type Profile {
   isFollowed: Boolean
   isPubliclyVisible: Boolean
   isPublished: Boolean
+  location: String
   name: String
   profileArtistsLayout: String
     @deprecated(reason: "Prefer profileArtistsLayout in Partner type")
@@ -10503,6 +10534,7 @@ type Query {
     key: String!
     public: Boolean = true
   ): [OrderedSet]
+  page(id: ID!): Page!
 
   # A Partner
   partner(
@@ -12707,6 +12739,9 @@ type UserAddress {
   # Phone number
   phoneNumber: String
 
+  # Phone number country code
+  phoneNumberCountryCode: String
+
   # Postal Code
   postalCode: String
 
@@ -12736,6 +12771,9 @@ input UserAddressAttributes {
 
   # Phone number
   phoneNumber: String
+
+  # ISO Phone number country code
+  phoneNumberCountryCode: String
 
   # Postal code
   postalCode: String
@@ -13174,6 +13212,7 @@ type Viewer {
     key: String!
     public: Boolean = true
   ): [OrderedSet]
+  page(id: ID!): Page!
 
   # A Partner
   partner(

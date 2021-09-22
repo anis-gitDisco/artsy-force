@@ -5,6 +5,13 @@ import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type FairOrganizerApp_fairOrganizer = {
     readonly name: string | null;
+    readonly slug: string;
+    readonly about: string | null;
+    readonly profile: {
+        readonly image: {
+            readonly url: string | null;
+        } | null;
+    } | null;
     readonly " $fragmentRefs": FragmentRefs<"FairOrganizerPastEventsRail_fairOrganizer" | "FairOrganizerHeaderImage_fairOrganizer" | "FairOrganizerHeader_fairOrganizer" | "FairOrganizerLatestArticles_fairOrganizer">;
     readonly " $refType": "FairOrganizerApp_fairOrganizer";
 };
@@ -30,6 +37,61 @@ const node: ReaderFragment = {
       "storageKey": null
     },
     {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "slug",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": [
+        {
+          "kind": "Literal",
+          "name": "format",
+          "value": "HTML"
+        }
+      ],
+      "kind": "ScalarField",
+      "name": "about",
+      "storageKey": "about(format:\"HTML\")"
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Profile",
+      "kind": "LinkedField",
+      "name": "profile",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "Image",
+          "kind": "LinkedField",
+          "name": "image",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": [
+                {
+                  "kind": "Literal",
+                  "name": "version",
+                  "value": "wide"
+                }
+              ],
+              "kind": "ScalarField",
+              "name": "url",
+              "storageKey": "url(version:\"wide\")"
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
       "args": null,
       "kind": "FragmentSpread",
       "name": "FairOrganizerPastEventsRail_fairOrganizer"
@@ -52,5 +114,5 @@ const node: ReaderFragment = {
   ],
   "type": "FairOrganizer"
 };
-(node as any).hash = '9e9308ba6c443b37423ab1ae3a027e09';
+(node as any).hash = '72c9c6980aa419127501dd39b6d34f3e';
 export default node;
