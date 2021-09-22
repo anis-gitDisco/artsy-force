@@ -13,7 +13,10 @@ import {
   acceptOfferInsufficientInventoryFailure,
   acceptOfferPaymentFailed,
   acceptOfferPaymentFailedInsufficientFunds,
+  acceptOfferPaymentRequiresAction,
   acceptOfferSuccess,
+  fixFailedPaymentSuccess,
+  fixFailedPaymentWithActionRequired,
 } from "../__fixtures__/MutationResults"
 import { AcceptFragmentContainer } from "../Accept"
 import { OrderAppTestPage } from "./Utils/OrderAppTestPage"
@@ -41,6 +44,8 @@ jest.mock("@stripe/stripe-js", () => {
     _mockReset: () => (mock = mockStripe()),
   }
 })
+
+const { _mockStripe } = require("@stripe/stripe-js")
 
 const realSetInterval = global.setInterval
 
@@ -82,6 +87,7 @@ describe("Accept seller offer", () => {
     } as AcceptTestQueryRawResponse,
     defaultMutationResults: {
       ...acceptOfferSuccess,
+      ...fixFailedPaymentSuccess,
     },
     TestPage: OrderAppTestPage,
   })
@@ -220,6 +226,21 @@ describe("Accept seller offer", () => {
       )
       const artistId = testOrder.lineItems.edges[0].node.artwork.artists[0].slug
       expect(window.location.assign).toHaveBeenCalledWith(`/artist/${artistId}`)
+    })
+
+    it("commits fixFailedPayment mutation with Gravity credit card id", async () => {
+      mutations.useResultsOnce(acceptOfferPaymentRequiresAction)
+      mutations.useResultsOnce(fixFailedPaymentWithActionRequired)
+      await page.clickSubmit()
+
+      expect(mutations.lastFetchVariables).toMatchObject({
+        input: {
+          creditCardId: "creditCardId",
+          offerId: "myoffer-id",
+        },
+      })
+
+      expect(_mockStripe().handleCardAction).toBeCalledWith("client-secret")
     })
   })
 })
