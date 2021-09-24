@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import { Box, DROP_SHADOW, FullBleed, Spacer, Text } from "@artsy/palette"
 import { SearchApp_viewer } from "v2/__generated__/SearchApp_viewer.graphql"
 import { NavigationTabsFragmentContainer as NavigationTabs } from "v2/Apps/Search/Components/NavigationTabs"
@@ -35,10 +35,10 @@ export const SearchApp: React.FC<SearchAppProps> = ({ viewer, children }) => {
     match: { location },
   } = useRouter()
   const { searchConnection, artworksConnection } = viewer
-  const {
-    query: { term },
-  } = location
+  const { query } = location
   const { aggregations } = searchConnection!
+
+  const term = useRef(query.term)
 
   const typeAggregation = aggregations?.find(agg => agg?.slice === "TYPE")
     ?.counts
@@ -60,11 +60,11 @@ export const SearchApp: React.FC<SearchAppProps> = ({ viewer, children }) => {
 
   return (
     <StickyProvider>
-      <SearchMeta term={term} />
+      <SearchMeta term={term.current} />
       <Spacer mb={4} />
       {hasResults ? (
         <>
-          <TotalResults count={totalCount} term={term} />
+          <TotalResults count={totalCount} term={term.current} />
           <Spacer mb={4} />
           <Sticky>
             {({ stuck }) => {
@@ -75,7 +75,7 @@ export const SearchApp: React.FC<SearchAppProps> = ({ viewer, children }) => {
                   <AppContainer>
                     <NavigationTabs
                       artworkCount={artworkCount}
-                      term={term}
+                      term={term.current}
                       searchableConnection={searchConnection!}
                     />
                   </AppContainer>
@@ -87,7 +87,7 @@ export const SearchApp: React.FC<SearchAppProps> = ({ viewer, children }) => {
           <Box minHeight="30vh">{children}</Box>
         </>
       ) : (
-        <ZeroState term={term} />
+        <ZeroState term={term.current} />
       )}
       <Spacer mb={4} />
       <RecentlyViewed />
